@@ -1,89 +1,43 @@
 # sw2urdf_ros2
 
-The current solidworks sw2urdf plugin can only be used in ros1, which is obviously unfriendly to the current learning
-environment.So I made this tool to convert files to ros2 for use. At this stage, the tool has only been successfully tested in rviz2.
+This is an adapted version of a [script](https://github.com/xiaoming-sun6/sw2urdf_ros2) by xiaoming-sun6.
+It allows you to convert a ROS 1 robot description package that is created by the sw2urdf exporter of SolidWorks to ROS 2.
+It will propably also mostly work with other ROS 1 URDF packages, but might require some small fixes for individual cases.
 
-### Table of contents
+Tested with the following environment, but will propably also work with others.
+- Solidworks 2020
+- Ubuntu 22.04
+- ROS 2 Rolling
+- Python == 3.10
 
-1. [Environment](#1-environment)
-2. [Getting tool](#2-getting-tool)
-3. [Getting started](#3-getting-started)
-4. [Changing configuration](#4-changing-configuration)
-5. [Running launch file](#5-running-launch-file)
-6. [Reference](#5-reference)
-
-### 1. Environment
-
-- Solidworks 2019
-- Ubuntu 20.04
-- Ros2 foxy
-- Python == 3.8
-
-### 2. Getting tool
-
-We download the tool from github
+Download the tool from github
 
 ~~~ bash
-git clone https://github.com/xiaoming-sun6/sw2urdf_ros2.git
-~~~ 
-
-### 3. Getting started
-
-We should have an urdf folder that outputs from solidworks.Let's say the name of the folder is test_urdf(I had put this folder in the project as a demo file).
-
-Let's create a workspace called test_urdf_tool_ws and a ROS package called test_urdf_tool
-
-~~~ bash
-mkdir test_urdf_tool_ws && mkdir test_urdf_tool_ws/src
-cd test_urdf_tool_ws && colcon build
-cd src && ros2 pkg create test_urdf_tool --build-type ament_python
+git clone https://github.com/SammyRamone/sw2urdf_ros2.git
 ~~~
 
-### 4. Changing configuration
+Change the configuration variables at the top of the conversion_urdf_ros_2_ros2.py
 
-We must change the configuration variables in conversion_urdf_ros_2_ros2.py if we use this tool.
-
-~~~python
-# Configuration variable
-
-# This variable is the path to the solidworks output folder of urdf files
-source_dir = '/home/sxm/Project/ros/test_urdf/'
-
-# This variable is the package path of ros2
-target_dir = '/home/sxm/Project/ros/test_urdf_tool_ws/src/test_urdf_tool/'
-
-# This variable is the package-name of ros2
-package_name = "test_urdf_tool"
-
-# This variable is the solidworks output folder name
-output_folder_name = "test_urdf"
-~~~
-
-After changing the configuration variables, we run the python file in a new terminal.
+Run the script.
 
 ```bash
-python conversion_urdf_ros_2_ros2.py
+python3 conversion_urdf_ros_2_ros2.py
 ```
 
-Then,We go into the workspace and build the code.
+Build the package in your workspace and source it.
 ~~~ bash
-cd .. && colcon build && source install/setup.bash
+cd PATH:_TO_WORKSPACE && colcon build && source install/setup.bash
 ~~~
 
-### 5. Running launch file
-Finally，We run the launch files.
+Launch the package to bring up RViz with the robot.
 ~~~ bash
-ros2 launch test_urdf_tool launch.py 
+ros2 launch test_urdf_tool launch.py
 ~~~
 
-Don't forget to change the rviz configuration
-![rviz](https://github.com/xiaoming-sun6/sw2urdf_ros2/blob/master/img/rviz.png)
+A default RViz config should be loaded that shows the robot, but you might need to perform further changes.
 
-### 5. Reference
-Thanks for the links
 
-[sw2urdf plugin](http://wiki.ros.org/sw_urdf_exporter)  
-[lesson_urdf](https://github.com/olmerg/lesson_urdf)  
-[Source of inspiration](https://zhuanlan.zhihu.com/p/465398486)
+[Original Implementation of this script](https://github.com/xiaoming-sun6/sw2urdf_ros2)
 
+[sw2urdf plugin](http://wiki.ros.org/sw_urdf_exporter)
 
