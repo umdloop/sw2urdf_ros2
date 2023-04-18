@@ -5,7 +5,7 @@ import sys
 # Configuration variable
 
 # This variable is the path to the solidworks output folder containing the urdf files
-source_dir = '../solidworks_export/'
+source_dir = '../System-X_Simulation_Dummy_V1_export_test.SLDASM/'
 
 # This variable is the name for the ROS 2 package
 package_name = "system_x_description"
@@ -15,7 +15,7 @@ package_directory = '../'
 target_dir = package_directory + package_name + '/'
 
 # This variable is the name of the URDF file that SolidWorks outputs
-source_urdf_file_name = "7mm_Concept_Group.SLDASM"
+source_urdf_file_name = "System-X_Simulation_Dummy_V1_export_test.SLDASM"
 
 # This variable defines the name of the target URDF in the ROS 2 package
 target_urdf_file_name = "robot"
