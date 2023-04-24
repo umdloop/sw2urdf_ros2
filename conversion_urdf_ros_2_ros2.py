@@ -78,7 +78,7 @@ if __name__ == '__main__':
                     source_urdf_file_name + ".urdf " + target_dir + "urdf/")
     # rename URDF
     run_command_dir(target_dir, "mv ./urdf/" +
-                    source_urdf_file_name + ".urdf " + target_dir + "urdf/" + target_urdf_file_name + ".urdf.xacro")
+                    source_urdf_file_name + ".urdf " + "./urdf/" + target_urdf_file_name + ".urdf.xacro")
     # create empty file to install marker in the package index
     run_command_dir(target_dir, f"touch ./resource/{package_name}")
 
