@@ -143,13 +143,9 @@ if __name__ == '__main__':
         links_to_keep = links_to_keep + root.findall(".//mesh[@filename='package://" + package_name + "/meshes/visual/" + stl_file + "']/../../..")
     # get all links to find out for which we need to delete the meshes
     links = root.findall(".//mesh/../../..")
-    print(links_to_keep)
-    print(links)
     links_to_delete = set(links) - set(links_to_keep)
     for link in links_to_delete:
-        print(link)
         elements = link.findall(".//mesh/../..")
-        print(elements)
         for element in elements:
             link.remove(element)
     tree.write(target_dir + "urdf/" + target_urdf_file_name + ".urdf.xacro")
