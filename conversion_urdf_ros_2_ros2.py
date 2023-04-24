@@ -8,13 +8,13 @@ from os.path import isfile, join
 # Configuration variable
 
 # This variable is the path to the solidworks output folder containing the urdf files
-source_dir = '../../System-X_Simulation_Dummy_V1_export_test.SLDASM/'
+source_dir = '../System-X_Simulation_Dummy_V1_export_test.SLDASM/'
 
 # This variable is the name for the ROS 2 package
-package_name = "system_x_description"
+package_name = "elise_description"
 
 # This variable is the path for the ROS 2 package
-package_directory = '../'
+package_directory = '../elise_robot/'
 target_dir = package_directory + package_name + '/'
 
 # This variable is the name of the URDF file that SolidWorks outputs
@@ -26,7 +26,7 @@ target_urdf_file_name = "robot"
 # Maintainer, description, license and version that will be added to the package xml and setup.py
 maintainer_name = "Marc Bestmann"
 maintainer_mail = "marc.bestmann@dlr.de"
-description = "Description package for the System-X robot"
+description = "Description package for the ELISE robot"
 license_type = "TODO"
 version_number = "0.0.1"
 
