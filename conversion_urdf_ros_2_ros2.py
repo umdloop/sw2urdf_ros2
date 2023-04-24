@@ -8,7 +8,7 @@ from os.path import isfile, join
 # Configuration variable
 
 # This variable is the path to the solidworks output folder containing the urdf files
-source_dir = '../System-X_Simulation_Dummy_V1_export_test.SLDASM/'
+source_dir = '../../System-X_Simulation_Dummy_V1_export_test.SLDASM/'
 
 # This variable is the name for the ROS 2 package
 package_name = "system_x_description"
