@@ -148,5 +148,14 @@ if __name__ == '__main__':
         elements = link.findall(".//mesh/../..")
         for element in elements:
             link.remove(element)
+
+    # correct the path to the stl for collision files
+    collision_meshes = root.findall(".//collision/geometry/mesh")
+    for collision_mesh in collision_meshes:
+        old_path = collision_mesh.get('filename')
+        new_path = old_path.replace('visual', 'collision')
+        collision_mesh.set('filename', new_path)
+
+    # save modified URDF
     tree.write(target_dir + "urdf/" + target_urdf_file_name + ".urdf.xacro")
     print("conversion success!")
