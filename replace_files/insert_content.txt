@@ -87,5 +87,5 @@
 <joint name="tool_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0" />
     <parent link="tool0"/>
-    <child link="base_link_endo" />
+    <child link="endo_box" />
 </joint>
