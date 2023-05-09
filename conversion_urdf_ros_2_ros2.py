@@ -21,7 +21,7 @@ target_dir = package_directory + package_name + '/'
 source_urdf_file_name = "System-X_Simulation_Dummy_V1_export_test.SLDASM"
 
 # This variable defines the name of the target URDF in the ROS 2 package
-target_urdf_file_name = "robot"
+target_urdf_file_name = "elise"
 
 # Maintainer, description, license and version that will be added to the package xml and setup.py
 maintainer_name = "Marc Bestmann"
@@ -78,7 +78,7 @@ if __name__ == '__main__':
                     source_urdf_file_name + ".urdf " + target_dir + "urdf/")
     # rename URDF
     run_command_dir(target_dir, "mv ./urdf/" +
-                    source_urdf_file_name + ".urdf " + "./urdf/" + target_urdf_file_name + ".urdf.xacro")
+                    source_urdf_file_name + ".urdf " + "./urdf/" + target_urdf_file_name + ".xacro")
     # create empty file to install marker in the package index
     run_command_dir(target_dir, f"touch ./resource/{package_name}")
 
@@ -88,12 +88,13 @@ if __name__ == '__main__':
     os.system("cp -f ./replace_files/package.xml " + target_dir)
     os.system("cp -f ./replace_files/launch.py " + target_dir + "launch")
     os.system("cp -f ./replace_files/default.rviz " + target_dir + "rviz")
+    os.system("cp -f ./replace_files/elise_ur10.xacro " + target_dir + "urdf")
+    os.system("cp -f ./replace_files/robot.urdf.xacro " + target_dir + "urdf")
 
     # Change file content
     # launch.py
     replace_str(target_dir + "launch/launch.py", "PACKAGE_NAME", package_name)
-    replace_str(target_dir + "launch/launch.py",
-                "URDF_NAME.urdf", target_urdf_file_name + ".urdf.xacro")
+
     # setup.py
     replace_str(target_dir + "setup.py", "PACKAGE_NAME", package_name)
     replace_str(target_dir + "setup.cfg", "PACKAGE_NAME", package_name)
@@ -105,21 +106,22 @@ if __name__ == '__main__':
     replace_str(target_dir + "package.xml", "VERSION_NUMBER", version_number)
     replace_str(target_dir + "package.xml", "DESCRIPTION_TEXT", description)
     # urdf files
-    replace_str(target_dir + "urdf/" + target_urdf_file_name + ".urdf.xacro", source_urdf_file_name + "/meshes",
+    replace_str(target_dir + "urdf/" + target_urdf_file_name + ".xacro", source_urdf_file_name + "/meshes",
                 package_name + "/meshes/visual")
-    replace_str(target_dir + "urdf/" + target_urdf_file_name + ".urdf.xacro", source_urdf_file_name,
+    replace_str(target_dir + "urdf/" + target_urdf_file_name + ".xacro", source_urdf_file_name,
                 target_urdf_file_name)
 
     # remove fake link collisions and visuals that are wrongly exported from solidworks
-    replace_str(target_dir + "urdf/" + target_urdf_file_name + ".urdf.xacro", source_urdf_file_name + "/meshes",
-            package_name + "/meshes/visual")
+    replace_str(target_dir + "urdf/" + target_urdf_file_name + ".xacro", source_urdf_file_name + "/meshes",
+                package_name + "/meshes/visual")
 
     # Insert base_footprint
     keyword = "name=\"" + target_urdf_file_name + "\">"
     str = ""
     with open("./replace_files/insert_content.txt", "r", encoding="utf-8") as f:
         str = f.read()
-    file = open(target_dir + "/urdf/" + target_urdf_file_name + ".urdf.xacro", 'r')
+    file = open(target_dir + "/urdf/" +
+                target_urdf_file_name + ".xacro", 'r')
     content = file.read()
     post = content.find(keyword)
     if post != -1:
@@ -127,7 +129,7 @@ if __name__ == '__main__':
         content = content[:post] + "xmlns:xacro=\"http://www.ros.org/wiki/xacro\"\n  " + keyword + \
             "\n" + str + content[post + len(keyword):]
         file = open(target_dir + "/urdf/" +
-                    target_urdf_file_name + ".urdf.xacro", "w")
+                    target_urdf_file_name + ".xacro", "w")
         file.write(content)
     file.close()
 
@@ -135,12 +137,15 @@ if __name__ == '__main__':
     stl_path = source_dir + "/meshes/"
     stl_files = [f for f in listdir(stl_path) if isfile(join(stl_path, f))]
     ET.register_namespace('xacro', "http://www.ros.org/wiki/xacro")
-    tree = ET.parse(target_dir + "/urdf/" + target_urdf_file_name + ".urdf.xacro", ET.XMLParser(target=ET.TreeBuilder(insert_comments=True)))
+    tree = ET.parse(target_dir + "/urdf/" + target_urdf_file_name + ".xacro",
+                    ET.XMLParser(target=ET.TreeBuilder(insert_comments=True)))
     root = tree.getroot()
     # we want to keep those links who have an existing mesh file
     links_to_keep = []
     for stl_file in stl_files:
-        links_to_keep = links_to_keep + root.findall(".//mesh[@filename='package://" + package_name + "/meshes/visual/" + stl_file + "']/../../..")
+        links_to_keep = links_to_keep + \
+            root.findall(".//mesh[@filename='package://" + package_name +
+                         "/meshes/visual/" + stl_file + "']/../../..")
     # get all links to find out for which we need to delete the meshes
     links = root.findall(".//mesh/../../..")
     links_to_delete = set(links) - set(links_to_keep)
@@ -157,5 +162,5 @@ if __name__ == '__main__':
         collision_mesh.set('filename', new_path)
 
     # save modified URDF
-    tree.write(target_dir + "urdf/" + target_urdf_file_name + ".urdf.xacro")
+    tree.write(target_dir + "urdf/" + target_urdf_file_name + ".xacro")
     print("conversion success!")

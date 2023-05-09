@@ -1,0 +1,25 @@
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="robot">
+  <!-- Specifiy how the ELISE robot should be composed -->
+  <xacro:arg name="type_name" default="ELISE-UR"/> <!-- ELISE, ELISE-UR, ELISE-CC -->
+  <xacro:property name="type" value="$(arg type_name)"/>
+
+  <!-- Add base link if only the ELISE is used -->
+  <xacro:if value="${type == 'ELISE'}">
+    <link name="base_link"/>
+    <joint name="base_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="base_link"/>
+      <child link="endo_box" />
+    </joint>
+  </xacro:if>
+
+  <xacro:include filename="$(find elise_description)/urdf/elise.xacro"/>
+
+  <xacro:if value="${type == 'ELISE-UR'}">
+    <xacro:include filename="$(find elise_description)/urdf/elise_ur10.xacro"/>
+  </xacro:if>
+
+  <xacro:if value="${type == 'ELISE-CC'}">
+    <xacro:include filename="$(find elise_description)/urdf/elise_cc.xacro"/>
+  </xacro:if>
+</robot>

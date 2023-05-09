@@ -10,6 +10,7 @@ from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
 from launch.substitutions import Command
 
+
 def generate_launch_description():
     # Get the launch directory
     package_dir = get_package_share_directory('PACKAGE_NAME')
@@ -40,12 +41,12 @@ def generate_launch_description():
 
     declare_urdf_cmd = DeclareLaunchArgument(
         'urdf_file',
-        default_value=os.path.join(package_dir, 'urdf', 'URDF_NAME.urdf'),
+        default_value=os.path.join(package_dir, 'urdf', 'robot.urdf.xacro'),
         description='Name of the used URDF file')
 
     robot_description = ParameterValue(Command(['xacro ',
                                                 urdf_file,
-                                                ""]), # you can add your xacro arguments here
+                                                ""]),  # you can add your xacro arguments here
                                        value_type=str)
 
     start_robot_state_publisher_cmd = Node(
@@ -56,7 +57,7 @@ def generate_launch_description():
         output='screen',
         # parameters=[{'use_sim_time': use_sim_time}],
         parameters=[{
-                 'robot_description': robot_description}])
+            'robot_description': robot_description}])
 
     start_joint_state_publisher_cmd = Node(
         condition=IfCondition(use_joint_state_pub),
