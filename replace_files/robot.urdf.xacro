@@ -41,6 +41,11 @@
 
   <xacro:if value="${type == 'ELISE-CC'}">
     <!-- Cartesian Container System -->
-    <xacro:include filename="$(find elise_description)/urdf/elise_cc.xacro"/>
+    <xacro:include filename="$(find container_description)/urdf/container.xacro"/>
+    <joint name="tool_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="tool0"/>
+      <child link="endo_box" />
+    </joint>
   </xacro:if>
 </robot>

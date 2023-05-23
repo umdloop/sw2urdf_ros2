@@ -4,31 +4,7 @@ import sys
 import xml.etree.ElementTree as ET
 from os import listdir
 from os.path import isfile, join
-
-# Configuration variable
-
-# This variable is the path to the solidworks output folder containing the urdf files
-source_dir = '../System-X_Simulation_Dummy_V1_export_test.SLDASM/'
-
-# This variable is the name for the ROS 2 package
-package_name = "elise_description"
-
-# This variable is the path for the ROS 2 package
-package_directory = '../elise_robot/'
-target_dir = package_directory + package_name + '/'
-
-# This variable is the name of the URDF file that SolidWorks outputs
-source_urdf_file_name = "System-X_Simulation_Dummy_V1_export_test.SLDASM"
-
-# This variable defines the name of the target URDF in the ROS 2 package
-target_urdf_file_name = "elise"
-
-# Maintainer, description, license and version that will be added to the package xml and setup.py
-maintainer_name = "Marc Bestmann"
-maintainer_mail = "marc.bestmann@dlr.de"
-description = "Description package for the ELISE robot"
-license_type = "TODO"
-version_number = "0.0.1"
+import argparse
 
 
 def run_command_dir(command_dir, command):
@@ -47,6 +23,40 @@ def replace_str(file, old_str, new_str):
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--source-dir", help="The path to the solidworks output folder containing the urdf files", type=str)
+    parser.add_argument("--package-name",
+                        help="The name for the ROS 2 package", type=str)
+    parser.add_argument("--package-directory",
+                        help="The path for the ROS 2 package", type=str)
+    parser.add_argument("--source-urdf-file-name",
+                        help="The name of the URDF file that SolidWorks outputs", type=str)
+    parser.add_argument("--target-urdf-file-name",
+                        help="Defines the name of the target URDF in the ROS 2 package", type=str)
+    parser.add_argument("--maintainer-name",
+                        help="Will be added to the package xml and setup.py", type=str)
+    parser.add_argument("--maintainer-mail",
+                        help="Will be added to the package xml and setup.py",  type=str)
+    parser.add_argument(
+        "--description", help="Will be added to the package xml and setup.py",  type=str)
+    parser.add_argument(
+        "--license_type", help="Will be added to the package xml and setup.py",  type=str)
+    parser.add_argument(
+        "--version_number", help="Will be added to the package xml and setup.py", type=str)
+    args = parser.parse_args()
+    source_dir = args.source_dir
+    package_name = args.package_name
+    package_directory = args.package_directory
+    target_dir = package_directory + package_name + '/'
+    source_urdf_file_name = args.source_urdf_file_name
+    target_urdf_file_name = args.target_urdf_file_name
+    maintainer_name = args.maintainer_name
+    maintainer_mail = args.maintainer_mail
+    description = args.description
+    license_type = args.license_type
+    version_number = args.version_number
+
     # Check if this is a new package or if we might override something
     if os.path.exists(target_dir) and (os.listdir(target_dir) != 0):
         sys.stdout.write(
@@ -88,8 +98,14 @@ if __name__ == '__main__':
     os.system("cp -f ./replace_files/package.xml " + target_dir)
     os.system("cp -f ./replace_files/launch.py " + target_dir + "launch")
     os.system("cp -f ./replace_files/default.rviz " + target_dir + "rviz")
-    os.system("cp -f ./replace_files/elise_ur10.xacro " + target_dir + "urdf")
-    os.system("cp -f ./replace_files/robot.urdf.xacro " + target_dir + "urdf")
+    if package_name == "elise_description":
+        os.system("cp -f ./replace_files/elise_ur10.xacro " +
+                  target_dir + "urdf")
+        os.system("cp -f ./replace_files/robot.urdf.xacro " +
+                  target_dir + "urdf")
+    else:
+        os.system("cp -f ./replace_files/robot_cc.urdf.xacro " +
+                  target_dir + "urdf/robot.urdf.xacro")
 
     # Change file content
     # launch.py

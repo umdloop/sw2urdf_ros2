@@ -21,6 +21,7 @@ def generate_launch_description():
     use_joint_state_pub = LaunchConfiguration('use_joint_state_pub')
     use_rviz = LaunchConfiguration('use_rviz')
     urdf_file = LaunchConfiguration('urdf_file')
+    xacro_args = LaunchConfiguration('xacro_args')
 
     declare_rviz_config_file_cmd = DeclareLaunchArgument(
         'rviz_config_file',
@@ -44,9 +45,15 @@ def generate_launch_description():
         default_value=os.path.join(package_dir, 'urdf', 'robot.urdf.xacro'),
         description='Name of the used URDF file')
 
+    declare_xacro_cmd = DeclareLaunchArgument(
+        'xacro_args',
+        default_value="",
+        description='Arguments for xacro')
+
     robot_description = ParameterValue(Command(['xacro ',
-                                                urdf_file,
-                                                ""]),  # you can add your xacro arguments here
+                                                xacro_args,
+                                                " ",
+                                                urdf_file]),  # you can add your xacro arguments here
                                        value_type=str)
 
     start_robot_state_publisher_cmd = Node(
