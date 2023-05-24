@@ -87,6 +87,7 @@ def generate_launch_description():
     # Declare the launch options
     ld.add_action(declare_rviz_config_file_cmd)
     ld.add_action(declare_urdf_cmd)
+    ld.add_action(declare_xacro_cmd)
     ld.add_action(declare_use_robot_state_pub_cmd)
     ld.add_action(declare_use_joint_state_pub_cmd)
     ld.add_action(declare_use_rviz_cmd)
