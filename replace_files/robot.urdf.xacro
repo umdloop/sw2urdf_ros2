@@ -3,9 +3,6 @@
   <xacro:arg name="type_name" default="ELISE-UR"/> <!-- ELISE, ELISE-UR, ELISE-CC -->
   <xacro:property name="type" value="$(arg type_name)"/>
 
-  <!-- ELISE -->
-  <xacro:include filename="$(find elise_description)/urdf/elise.xacro"/>
-
   <!-- Sensor Frustum -->
   <material name="transparent">
     <color rgba="1.0 1.0 1.0 0.5"/>
@@ -26,6 +23,9 @@
 
   <!-- Add base link if only the ELISE is used -->
   <xacro:if value="${type == 'ELISE'}">
+    <xacro:property name="L1" value="0.4"/>
+    <xacro:property name="L2" value="0.1"/>
+    <xacro:property name="L3" value="0.05"/>
     <link name="base_link"/>
     <joint name="base_joint" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -36,11 +36,17 @@
 
   <xacro:if value="${type == 'ELISE-UR'}">
     <!-- UR-10 -->
+    <xacro:property name="L1" value="0.4"/>
+    <xacro:property name="L2" value="0.1"/>
+    <xacro:property name="L3" value="0.05"/>
     <xacro:include filename="$(find elise_description)/urdf/elise_ur10.xacro"/>
   </xacro:if>
 
   <xacro:if value="${type == 'ELISE-CC'}">
     <!-- Cartesian Container System -->
+    <xacro:property name="L1" value="1.6"/>
+    <xacro:property name="L2" value="0.1"/>
+    <xacro:property name="L3" value="0.05"/>
     <xacro:include filename="$(find container_description)/urdf/container.xacro"/>
     <joint name="tool_joint" type="fixed">
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -48,4 +54,7 @@
       <child link="endo_box" />
     </joint>
   </xacro:if>
+
+    <!-- ELISE -->
+  <xacro:include filename="$(find elise_description)/urdf/elise.xacro"/>
 </robot>
