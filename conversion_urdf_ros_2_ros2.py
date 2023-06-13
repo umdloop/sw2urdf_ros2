@@ -98,14 +98,6 @@ if __name__ == '__main__':
     os.system("cp -f ./replace_files/package.xml " + target_dir)
     os.system("cp -f ./replace_files/launch.py " + target_dir + "launch")
     os.system("cp -f ./replace_files/default.rviz " + target_dir + "rviz")
-    if package_name == "elise_description":
-        os.system("cp -f ./replace_files/elise_ur10.xacro " +
-                  target_dir + "urdf")
-        os.system("cp -f ./replace_files/robot.urdf.xacro " +
-                  target_dir + "urdf")
-    else:
-        os.system("cp -f ./replace_files/robot_cc.urdf.xacro " +
-                  target_dir + "urdf/robot.urdf.xacro")
 
     # Change file content
     # launch.py
