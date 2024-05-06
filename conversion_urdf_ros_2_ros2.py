@@ -102,7 +102,8 @@ if __name__ == '__main__':
     # Change file content
     # launch.py
     replace_str(target_dir + "launch/launch.py", "PACKAGE_NAME", package_name)
-
+    replace_str(target_dir + "launch/launch.py", "robot.urdf.xacro", target_urdf_file_name + ".xacro")
+    
     # setup.py
     replace_str(target_dir + "setup.py", "PACKAGE_NAME", package_name)
     replace_str(target_dir + "setup.cfg", "PACKAGE_NAME", package_name)
