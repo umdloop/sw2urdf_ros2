@@ -120,10 +120,6 @@ if __name__ == '__main__':
     replace_str(target_dir + "urdf/" + target_urdf_file_name + ".xacro", source_urdf_file_name,
                 target_urdf_file_name)
 
-    # remove fake link collisions and visuals that are wrongly exported from solidworks
-    replace_str(target_dir + "urdf/" + target_urdf_file_name + ".xacro", source_urdf_file_name + "/meshes",
-                package_name + "/meshes/visual")
-
     # Insert base_footprint
     keyword = "name=\"" + target_urdf_file_name + "\">"
     str = ""
