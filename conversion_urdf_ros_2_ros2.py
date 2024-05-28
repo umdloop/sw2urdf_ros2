@@ -25,25 +25,25 @@ def replace_str(file, old_str, new_str):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--source-dir", help="The path to the solidworks output folder containing the urdf files", type=str)
+        "--source-dir", help="The path to the solidworks output folder containing the urdf files", type=str, required=True)
     parser.add_argument("--package-name",
-                        help="The name for the ROS 2 package", type=str)
+                        help="The name for the ROS 2 package", type=str, required=True)
     parser.add_argument("--package-directory",
-                        help="The path for the ROS 2 package", type=str)
+                        help="The path for the ROS 2 package", type=str, required=True)
     parser.add_argument("--source-urdf-file-name",
-                        help="The name of the URDF file that SolidWorks outputs", type=str)
+                        help="The name of the URDF file that SolidWorks outputs", type=str, default="robot")
     parser.add_argument("--target-urdf-file-name",
-                        help="Defines the name of the target URDF in the ROS 2 package", type=str)
+                        help="Defines the name of the target URDF in the ROS 2 package", type=str, default="robot")
     parser.add_argument("--maintainer-name",
-                        help="Will be added to the package xml and setup.py", type=str)
+                        help="Will be added to the package xml and setup.py", type=str, default="")
     parser.add_argument("--maintainer-mail",
-                        help="Will be added to the package xml and setup.py",  type=str)
+                        help="Will be added to the package xml and setup.py",  type=str, default="")
     parser.add_argument(
-        "--description", help="Will be added to the package xml and setup.py",  type=str)
+        "--description", help="Will be added to the package xml and setup.py",  type=str, default="")
     parser.add_argument(
-        "--license_type", help="Will be added to the package xml and setup.py",  type=str)
+        "--license_type", help="Will be added to the package xml and setup.py",  type=str, default="")
     parser.add_argument(
-        "--version_number", help="Will be added to the package xml and setup.py", type=str)
+        "--version_number", help="Will be added to the package xml and setup.py", type=str, default="0.0.0")
     args = parser.parse_args()
     source_dir = args.source_dir
     package_name = args.package_name
@@ -56,6 +56,10 @@ if __name__ == '__main__':
     description = args.description
     license_type = args.license_type
     version_number = args.version_number
+
+    if not os.path.exists(source_dir):
+        sys.stdout.write(f"Source directory {source_dir} does not exist. Exiting...")
+        exit()
 
     # Check if this is a new package or if we might override something
     if os.path.exists(target_dir) and (os.listdir(target_dir) != 0):
@@ -102,8 +106,9 @@ if __name__ == '__main__':
     # Change file content
     # launch.py
     replace_str(target_dir + "launch/launch.py", "PACKAGE_NAME", package_name)
-    replace_str(target_dir + "launch/launch.py", "robot.urdf.xacro", target_urdf_file_name + ".xacro")
-    
+    replace_str(target_dir + "launch/launch.py", "robot.urdf.xacro",
+                target_urdf_file_name + ".xacro")
+
     # setup.py
     replace_str(target_dir + "setup.py", "PACKAGE_NAME", package_name)
     replace_str(target_dir + "setup.cfg", "PACKAGE_NAME", package_name)
