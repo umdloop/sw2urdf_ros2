@@ -1,0 +1,13 @@
+# Required fields
+source_dir: "/home/mdurrani/UMD_Loop/gz_testing/2000-SimplifiedAssembly-06"
+package_name: "drive_urdf"
+package_directory: "/home/mdurrani/UMD_Loop/gz_testing/src/"
+
+# Optional fields with defaults
+source_urdf_file_name: "2000-SimplifiedAssembly-06"
+target_urdf_file_name: "old_drive"
+maintainer_name: "UMDLoop"
+maintainer_mail: "umdloop@gmail.com"
+description: "URDF File for drivetrain used in the 2023-24 season."
+license_type: "Apache-2.0"
+version_number: "0.0.0"

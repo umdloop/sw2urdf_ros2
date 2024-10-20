@@ -4,12 +4,10 @@ import sys
 import xml.etree.ElementTree as ET
 from os import listdir
 from os.path import isfile, join
-import argparse
-
+import yaml
 
 def run_command_dir(command_dir, command):
     os.system("cd " + command_dir + " && " + command)
-
 
 def replace_str(file, old_str, new_str):
     file_data = ""
@@ -21,41 +19,27 @@ def replace_str(file, old_str, new_str):
     with open(file, "w", encoding="utf-8") as f:
         f.write(file_data)
 
-
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--source-dir", help="The path to the solidworks output folder containing the urdf files", type=str, required=True)
-    parser.add_argument("--package-name",
-                        help="The name for the ROS 2 package", type=str, required=True)
-    parser.add_argument("--package-directory",
-                        help="The path for the ROS 2 package", type=str, required=True)
-    parser.add_argument("--source-urdf-file-name",
-                        help="The name of the URDF file that SolidWorks outputs", type=str, default="robot")
-    parser.add_argument("--target-urdf-file-name",
-                        help="Defines the name of the target URDF in the ROS 2 package", type=str, default="robot")
-    parser.add_argument("--maintainer-name",
-                        help="Will be added to the package xml and setup.py", type=str, default="")
-    parser.add_argument("--maintainer-mail",
-                        help="Will be added to the package xml and setup.py",  type=str, default="")
-    parser.add_argument(
-        "--description", help="Will be added to the package xml and setup.py",  type=str, default="")
-    parser.add_argument(
-        "--license_type", help="Will be added to the package xml and setup.py",  type=str, default="")
-    parser.add_argument(
-        "--version_number", help="Will be added to the package xml and setup.py", type=str, default="0.0.0")
-    args = parser.parse_args()
-    source_dir = args.source_dir
-    package_name = args.package_name
-    package_directory = args.package_directory
+    if len(sys.argv) != 2:
+        print("Usage: python script.py config.yaml")
+        sys.exit(1)
+
+    # Load configuration from YAML
+    with open(sys.argv[1], 'r') as f:
+        config = yaml.safe_load(f)
+
+    # Extract configuration values
+    source_dir = config['source_dir']
+    package_name = config['package_name']
+    package_directory = config['package_directory']
     target_dir = package_directory + package_name + '/'
-    source_urdf_file_name = args.source_urdf_file_name
-    target_urdf_file_name = args.target_urdf_file_name
-    maintainer_name = args.maintainer_name
-    maintainer_mail = args.maintainer_mail
-    description = args.description
-    license_type = args.license_type
-    version_number = args.version_number
+    source_urdf_file_name = config.get('source_urdf_file_name', 'robot')
+    target_urdf_file_name = config.get('target_urdf_file_name', 'robot')
+    maintainer_name = config.get('maintainer_name', '')
+    maintainer_mail = config.get('maintainer_mail', '')
+    description = config.get('description', '')
+    license_type = config.get('license_type', '')
+    version_number = config.get('version_number', '0.0.0')
 
     if not os.path.exists(source_dir):
         sys.stdout.write(f"Source directory {source_dir} does not exist. Exiting...")
